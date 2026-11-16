@@ -45,4 +45,4 @@ flutter analyze
 
 ## Pengungkapan penggunaan AI
 
-OpenAI Codex membantu menyusun dan merapikan implementasi halaman Flutter serta draf dokumentasi dan jawaban reflektif di README ini. Saya perlu meninjau kembali kecocokan identitas, kode, dan penjelasan dengan materi perkuliahan sebelum pengumpulan.
+OpenAI Codex membantu menyusun dan merapikan implementasi halaman Flutter serta draf dokumentasi. Saya perlu meninjau kembali kecocokan identitas, kode, dan penjelasan dengan materi perkuliahan sebelum pengumpulan.

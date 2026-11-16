@@ -8,9 +8,9 @@ class MyHomePage extends StatelessWidget {
   final String kelas = 'PBP D';
 
   final List<ItemHomepage> items = const [
-    ItemHomepage('Lihat Proyek', Icons.folder_open, Colors.indigo),
-    ItemHomepage('Tambah Proyek', Icons.add_circle_outline, Colors.teal),
-    ItemHomepage('Logout', Icons.logout, Colors.deepOrange),
+    ItemHomepage('Lihat Proyek', Icons.folder_open, Color(0xFFD8C3A5)),
+    ItemHomepage('Tambah Proyek', Icons.add_circle_outline, Color(0xFF6F4E37)),
+    ItemHomepage('Logout', Icons.logout, Color(0xFF6F4E37)),
   ];
 
   @override
@@ -110,6 +110,11 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final foregroundColor =
+        ThemeData.estimateBrightnessForColor(item.color) == Brightness.dark
+        ? Colors.white
+        : Colors.brown.shade900;
+
     return Material(
       color: item.color,
       borderRadius: BorderRadius.circular(16),
@@ -129,13 +134,13 @@ class ItemCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(item.icon, color: Colors.white, size: 32),
+              Icon(item.icon, color: foregroundColor, size: 32),
               const SizedBox(height: 8),
               Text(
                 item.name,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: foregroundColor,
                   fontWeight: FontWeight.w600,
                 ),
               ),
