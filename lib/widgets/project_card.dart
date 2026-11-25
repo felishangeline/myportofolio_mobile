@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:myportofolio_mobile/screens/education_form.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
+import 'package:myportofolio_mobile/screens/project_list_screen.dart';
+import 'package:myportofolio_mobile/screens/login_screen.dart';
+import 'package:myportofolio_mobile/services/auth_state.dart';
+import 'package:myportofolio_mobile/widgets/auth_guard.dart';
+import 'package:provider/provider.dart';
 
 class ItemHomepage {
   final String name;
@@ -36,12 +41,30 @@ class ItemCard extends StatelessWidget {
               ),
             );
 
-          if (item.name == 'Tambah Proyek') {
+          if (item.name == 'Lihat Proyek') {
             Navigator.push(
               context,
               MaterialPageRoute<void>(
-                builder: (context) => const ProjectFormPage(),
+                builder: (context) => const ProjectListScreen(),
               ),
+            );
+          } else if (item.name == 'Tambah Proyek') {
+            ensureLoggedIn(context).then((loggedIn) {
+              if (!loggedIn || !context.mounted) return;
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (context) => const ProjectFormPage(),
+                ),
+              );
+            });
+          } else if (item.name == 'Logout' &&
+              context.read<AuthState>().isLoggedIn) {
+            context.read<AuthState>().logout();
+          } else if (item.name == 'Login') {
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(builder: (_) => const LoginScreen()),
             );
           } else if (item.name == 'Tambah Edukasi') {
             Navigator.push(
