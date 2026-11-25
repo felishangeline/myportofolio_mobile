@@ -1,30 +1,79 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:myportofolio_mobile/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('Edukasi card validates fields and shows the submitted summary', (
+    tester,
+  ) async {
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.drag(find.byType(ListView).first, const Offset(0, -300));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tambah Edukasi'));
+    await tester.pumpAndSettle();
+    expect(find.text('Nama Institusi'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await tester.tap(find.text('Simpan'));
+    await tester.pumpAndSettle();
+    expect(find.text('Nama institusi wajib diisi.'), findsOneWidget);
+    expect(find.text('Program atau gelar wajib diisi.'), findsOneWidget);
+    expect(find.text('Tahun mulai wajib diisi.'), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.enterText(find.byType(TextFormField).at(0), '   ');
+    await tester.enterText(find.byType(TextFormField).at(1), 'Ilmu Komputer');
+    await tester.enterText(find.byType(TextFormField).at(2), '2024');
+    await tester.enterText(find.byType(TextFormField).at(3), '2023');
+    await tester.tap(find.text('Simpan'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Nama institusi wajib diisi.'), findsOneWidget);
+    expect(
+      find.text('Tahun selesai tidak boleh sebelum tahun mulai.'),
+      findsOneWidget,
+    );
+
+    await tester.enterText(
+      find.byType(TextFormField).at(0),
+      'Universitas Indonesia',
+    );
+    await tester.enterText(find.byType(TextFormField).at(3), '2025');
+    await tester.tap(find.text('Simpan'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Ringkasan Edukasi'), findsOneWidget);
+    expect(find.text('Institusi: Universitas Indonesia'), findsOneWidget);
+    expect(find.text('Program/Gelar: Ilmu Komputer'), findsOneWidget);
+    expect(find.text('Tahun Mulai: 2024'), findsOneWidget);
+    expect(find.text('Tahun Selesai: 2025'), findsOneWidget);
+
+    await tester.tap(find.text('Tutup'));
+    await tester.pumpAndSettle();
+    expect(find.text('Tambah Edukasi'), findsOneWidget);
+  });
+
+  testWidgets('drawer opens Edukasi and Home returns to the main page', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MyApp());
+
+    await tester.tap(find.byTooltip('Open navigation menu'));
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(
+        of: find.byType(Drawer),
+        matching: find.text('Tambah Edukasi'),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Nama Institusi'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Open navigation menu'));
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(of: find.byType(Drawer), matching: find.text('Home')),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Selamat datang di MyPortfolio Mobile!'), findsOneWidget);
   });
 }
